@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Vision Traceability UX Prototype</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --good: #059669;
+      --warn: #d97706;
+      --line: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 20px 40px;
+    }
+
+    h1, h2, h3 { margin: 0 0 10px; }
+    p { margin: 0; color: var(--muted); }
+
+    .header {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 { font-size: 1.5rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .card h2 { font-size: 1.05rem; margin-bottom: 14px; }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+
+    textarea, input, select {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+
+    textarea { min-height: 90px; resize: vertical; }
+
+    button {
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover { filter: brightness(0.95); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      margin-bottom: 10px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      max-height: 400px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .item .meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .journey {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .flow-col {
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 10px;
+      background: #f8fafc;
+      min-height: 180px;
+    }
+
+    .flow-col h3 {
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .link-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .metric .value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .status-good { color: var(--good); }
+    .status-warn { color: var(--warn); }
+
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .flow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="header">
+      <h1>Vision → EPIC → User Story Alignment Board</h1>
+      <p>A UX prototype for product owners to define the vision, break it into EPICS, and assess how user stories realize that vision.</p>
+    </section>
+
+    <section class="metrics" id="metrics"></section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>1) Define Vision</h2>
+        <span class="pill">North Star</span>
+        <label for="visionTitle">Vision Title</label>
+        <input id="visionTitle" placeholder="e.g., Deliver frictionless customer onboarding" />
+        <label for="visionDesc">Vision Statement</label>
+        <textarea id="visionDesc" placeholder="What problem are we solving and what outcome do we want?"></textarea>
+        <button id="saveVision">Save Vision</button>
+        <div class="item" style="margin-top:12px" id="visionPreview"></div>
+      </article>
+
+      <article class="card">
+        <h2>2) Define EPIC</h2>
+        <span class="pill">Strategic themes</span>
+        <label for="epicName">EPIC Name</label>
+        <input id="epicName" placeholder="e.g., Identity Verification" />
+        <label for="epicGoal">EPIC Goal</label>
+        <textarea id="epicGoal" placeholder="Describe how this EPIC contributes to the vision"></textarea>
+        <button id="addEpic">Add EPIC</button>
+        <div class="list" id="epicList" style="margin-top:12px"></div>
+      </article>
+    </section>
+
+    <section class="card" style="margin-bottom:16px">
+      <h2>3) User Stories linked to EPICS</h2>
+      <label for="storyText">User Story</label>
+      <textarea id="storyText" placeholder="As a [user], I want [capability], so that [value]"></textarea>
+      <label for="storyEpic">Link to EPIC</label>
+      <select id="storyEpic"></select>
+      <button id="addStory">Add User Story</button>
+      <div class="list" id="storyList" style="margin-top:12px"></div>
+    </section>
+
+    <section class="journey">
+      <h2>Realization View: How Vision is Delivered</h2>
+      <p>Traceability map that shows the relationship from Vision to EPICS to User Stories.</p>
+      <div class="flow">
+        <div class="flow-col">
+          <h3>Vision</h3>
+          <div id="flowVision"></div>
+        </div>
+        <div class="flow-col">
+          <h3>EPICS</h3>
+          <div id="flowEpics"></div>
+        </div>
+        <div class="flow-col">
+          <h3>User Stories</h3>
+          <div id="flowStories"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      vision: {
+        title: 'Reduce onboarding time by 40% for new enterprise customers',
+        description: 'Create a guided onboarding flow that removes friction, increases completion, and accelerates time-to-value.'
+      },
+      epics: [
+        { id: 1, name: 'Self-serve setup wizard', goal: 'Help admins configure core settings in under 10 minutes.' },
+        { id: 2, name: 'Identity verification', goal: 'Build trust and compliance with automated verification checks.' }
+      ],
+      stories: [
+        { id: 1, epicId: 1, text: 'As an admin, I want a pre-filled setup template so that I can go live faster.' },
+        { id: 2, epicId: 1, text: 'As an admin, I want contextual tips so that I avoid setup errors.' },
+        { id: 3, epicId: 2, text: 'As a compliance officer, I want automatic ID checks so that onboarding meets policy.' }
+      ]
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function renderMetrics() {
+      const totalEpics = state.epics.length;
+      const totalStories = state.stories.length;
+      const mappedStories = state.stories.filter(s => state.epics.some(e => e.id === s.epicId)).length;
+      const traceability = totalStories ? Math.round((mappedStories / totalStories) * 100) : 0;
+      const storiesPerEpic = totalEpics ? (totalStories / totalEpics).toFixed(1) : '0.0';
+
+      $('metrics').innerHTML = `
+        <article class="metric">
+          <p>Defined Vision</p>
+          <div class="value">${state.vision.title ? '1' : '0'}</div>
+        </article>
+        <article class="metric">
+          <p>EPICS</p>
+          <div class="value">${totalEpics}</div>
+        </article>
+        <article class="metric">
+          <p>User Stories</p>
+          <div class="value">${totalStories}</div>
+        </article>
+        <article class="metric">
+          <p>Traceability</p>
+          <div class="value ${traceability === 100 ? 'status-good' : 'status-warn'}">${traceability}%</div>
+          <p class="meta">${storiesPerEpic} stories per EPIC</p>
+        </article>
+      `;
+    }
+
+    function renderVision() {
+      $('visionPreview').innerHTML = `
+        <strong>${state.vision.title || 'No vision set yet'}</strong>
+        <p style="margin-top:6px">${state.vision.description || 'Add a concise statement that explains the business outcome.'}</p>
+      `;
+
+      $('flowVision').innerHTML = state.vision.title
+        ? `<div class="link-card"><strong>${state.vision.title}</strong><div class="meta">${state.vision.description}</div></div>`
+        : '<p>No vision defined.</p>';
+    }
+
+    function renderEpics() {
+      $('epicList').innerHTML = state.epics.map(epic => `
+        <div class="item">
+          <strong>${epic.name}</strong>
+          <div class="meta">${epic.goal}</div>
+        </div>
+      `).join('');
+
+      $('storyEpic').innerHTML = state.epics.map(epic =>
+        `<option value="${epic.id}">${epic.name}</option>`
+      ).join('');
+
+      $('flowEpics').innerHTML = state.epics.map(epic => {
+        const count = state.stories.filter(s => s.epicId === epic.id).length;
+        return `
+          <div class="link-card">
+            <strong>${epic.name}</strong>
+            <div class="meta">${count} linked stories</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStories() {
+      $('storyList').innerHTML = state.stories.map(story => {
+        const epic = state.epics.find(e => e.id === story.epicId);
+        return `
+          <div class="item">
+            ${story.text}
+            <div class="meta">Linked EPIC: ${epic ? epic.name : 'Unmapped'}</div>
+          </div>
+        `;
+      }).join('');
+
+      $('flowStories').innerHTML = state.stories.map(story => {
+        const epic = state.epics.find(e => e.id === story.epicId);
+        return `
+          <div class="link-card">
+            ${story.text}
+            <div class="meta">from ${epic ? epic.name : 'Unknown EPIC'}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAll() {
+      renderMetrics();
+      renderVision();
+      renderEpics();
+      renderStories();
+    }
+
+    $('saveVision').addEventListener('click', () => {
+      state.vision.title = $('visionTitle').value.trim();
+      state.vision.description = $('visionDesc').value.trim();
+      renderAll();
+    });
+
+    $('addEpic').addEventListener('click', () => {
+      const name = $('epicName').value.trim();
+      const goal = $('epicGoal').value.trim();
+      if (!name || !goal) return;
+      state.epics.push({ id: Date.now(), name, goal });
+      $('epicName').value = '';
+      $('epicGoal').value = '';
+      renderAll();
+    });
+
+    $('addStory').addEventListener('click', () => {
+      const text = $('storyText').value.trim();
+      const epicId = Number($('storyEpic').value);
+      if (!text || !epicId) return;
+      state.stories.push({ id: Date.now(), epicId, text });
+      $('storyText').value = '';
+      renderAll();
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
